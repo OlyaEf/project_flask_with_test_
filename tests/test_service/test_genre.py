@@ -1,15 +1,15 @@
 # импортируем MagicMock
 from unittest.mock import MagicMock
+
 # импортируем pytest
 import pytest
 
-# модель, она же наша сущность
-from dao.model.genre import Genre
 # DAO для работы с БД
 from dao.genre import GenreDAO
+# модель, она же наша сущность
+from dao.model.genre import Genre
 # Service который мы тестируем
 from service.genre import GenreService
-from setup_db import db
 
 
 # готовим фикстуру где мы подменяем всю логику при работе с БД
@@ -27,7 +27,7 @@ def genre_dao():
     genre_dao.get_all = MagicMock(return_value=[test_1, test_2, test_3])
     genre_dao.create = MagicMock(return_value=Genre(id=2))
     genre_dao.delete = MagicMock()
-    genre_dao.update = MagicMock()
+    genre_dao.update = MagicMock(return_value=Genre(id=3))
     return genre_dao
 
 

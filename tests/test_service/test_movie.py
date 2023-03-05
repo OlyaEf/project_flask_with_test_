@@ -1,24 +1,31 @@
-
 # импортируем MagicMock
 from unittest.mock import MagicMock
+
 # импортируем pytest
 import pytest
 
+from dao.model.director import Director
+from dao.model.genre import Genre
 from dao.model.movie import Movie
 from dao.movie import MovieDAO
 from service.movie import MovieService
-from setup_db import db
 
 
 # готовим фикстуру где мы подменяем всю логику при работе с БД
 @pytest.fixture()
 def movie_dao():
+    director = Director(id=1, name='Glendyn Ivin')
+    genre = Genre(id=1, name='comedy')
+
     # мы не передаем объект сессии БД, мы симулируем работу с БД передав None
     movie_dao = MovieDAO(None)
     # готовим три вымышленных пользователя
-    test_1 = Movie(id=1, title="title1", description="description1", trailer="trailer1", year=1990, rating=3)
-    test_2 = Movie(id=2, title="title2", description="description2", trailer="trailer2", year=2000, rating=6)
-    test_3 = Movie(id=3, title="title3", description="description3", trailer="trailer3", year=2020, rating=9)
+    test_1 = Movie(id=1, title="title1", description="description1", trailer="trailer1", year=1990, rating=3,
+                   director=director, genre=genre)
+    test_2 = Movie(id=2, title="title2", description="description2", trailer="trailer2", year=2000, rating=6,
+                   director=director, genre=genre)
+    test_3 = Movie(id=3, title="title3", description="description3", trailer="trailer3", year=2020, rating=9,
+                   director=director, genre=genre)
 
     # при вызове дао мы подменяем метод на MagicMock (вкладывая заранее подготовленные данные в наши функции)
     movie_dao.get_one = MagicMock(return_value=test_1)
@@ -58,6 +65,8 @@ class TestMovieService:
             "trailer": "trailer2",
             "year": 2000,
             "rating": 6,
+            "director_id": 1,
+            "genre_id": 1
         }
         movie = self.movie_service.create(movie_d)
         assert movie.id != None
@@ -73,5 +82,7 @@ class TestMovieService:
             "trailer": "trailer2",
             "year": 2000,
             "rating": 6,
+            "director_id": 1,
+            "genre_id": 1
         }
         self.movie_service.update(movie_d)

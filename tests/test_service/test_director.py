@@ -1,15 +1,15 @@
 # импортируем MagicMock
 from unittest.mock import MagicMock
+
 # импортируем pytest
 import pytest
 
-# модель, она же наша сущность
-from dao.model.director import Director
 # DAO для работы с БД
 from dao.director import DirectorDAO
+# модель, она же наша сущность
+from dao.model.director import Director
 # Service который мы тестируем
 from service.director import DirectorService
-from setup_db import db
 
 
 # готовим фикстуру где мы подменяем всю логику при работе с БД
